@@ -1,91 +1,148 @@
-# News Search App using Flask and NewsAPI
+# AI News Search Application
 
-## 1. Project Title
+## 1. Project Overview
 
-**News Search App using Flask and NewsAPI**
+**AI News Search** is a Flask-based web application that allows users to search for news using **natural-language questions**.
 
----
+Instead of requiring the user to enter only short keywords, the application uses **Gemini** to understand the user's question and generate concise search queries. These queries are then sent to **NewsAPI** to retrieve relevant news articles.
 
-## 2. Project Overview
+### Example
 
-The News Search App is a web application that allows users to search for news articles based on a topic or keyword.
-
-For example, the user can search for:
-
-* Python
-* Artificial Intelligence
-* Machine Learning
-* Technology
-* Cricket
-
-The application uses **Flask** as the backend and integrates the **NewsAPI** third-party REST API to retrieve news articles.
-
-The NewsAPI requires an **API key**, so the project also demonstrates how to securely store and use an API key using an `.env` file and environment variables.
-
----
-
-# 3. Why Did I Build This Project?
-
-I built this project to learn how to integrate a **third-party API that requires an API key** into a Flask application.
-
-Before this project, I learned API integration using a public API that did not require authentication. I wanted to understand the next important concept: **API-key-based authentication**.
-
-Through this project, I learned:
-
-* How to find an API
-* How to read API documentation
-* How to obtain an API key
-* What an API key is
-* How to store an API key securely
-* How to use `.env`
-* How to use environment variables
-* How to send GET requests
-* How to pass query parameters
-* How to receive JSON responses
-* How to process JSON data
-* How Flask communicates with an external API
-* How to handle API errors
-* Why secrets should not be uploaded to GitHub
-
----
-
-# 4. Technologies Used
-
-| Technology    | Purpose                                    |
-| ------------- | ------------------------------------------ |
-| Python        | Backend programming                        |
-| Flask         | Backend web framework                      |
-| HTML          | Web page structure                         |
-| CSS           | Web page styling                           |
-| JavaScript    | Frontend interaction                       |
-| Requests      | Sending HTTP requests                      |
-| python-dotenv | Loading variables from `.env`              |
-| NewsAPI       | Providing news data                        |
-| JSON          | Data exchange format                       |
-| Git/GitHub    | Version control and source-code management |
-
----
-
-# 5. Main Features
-
-* Search news by topic
-* Get latest relevant articles
-* Display article title
-* Display article description
-* Display source
-* Display article image when available
-* Open the original article
-* API integration using Flask
-* API-key authentication
-* Error handling
-* Secure API-key storage
-
----
-
-# 6. Project Structure
+User enters:
 
 ```text
-news_api_project/
+Latest news on job layoffs because of GPT-6 Astra
+```
+
+The application can convert this into search queries such as:
+
+```text
+GPT-6 Astra
+AI job layoffs
+GPT-6 layoffs
+```
+
+These queries are then used to search NewsAPI.
+
+---
+
+# 2. Main Objective
+
+The main objective of this project is to learn how to integrate:
+
+* Flask
+* Frontend and backend communication
+* REST APIs
+* API requests and responses
+* JSON
+* API keys
+* Environment variables
+* Gemini LLM
+* NewsAPI
+* Error handling
+* Git and GitHub
+* Secure API-key management
+
+---
+
+# 3. Technologies Used
+
+| Technology    | Purpose                                                             |
+| ------------- | ------------------------------------------------------------------- |
+| Python        | Main programming language                                           |
+| Flask         | Backend web framework                                               |
+| HTML          | Webpage structure                                                   |
+| CSS           | Webpage styling                                                     |
+| JavaScript    | Frontend logic and API communication                                |
+| Gemini API    | Understands natural-language questions and generates search queries |
+| NewsAPI       | Retrieves news articles                                             |
+| Requests      | Sends HTTP requests from Python                                     |
+| python-dotenv | Loads environment variables from `.env`                             |
+| JSON          | Data exchange format                                                |
+| Git           | Version control                                                     |
+| GitHub        | Code repository                                                     |
+
+---
+
+# 4. Application Architecture
+
+```text
+                    USER
+                      |
+                      ↓
+              HTML/CSS/JavaScript
+                      |
+                      ↓
+              Flask Backend
+                      |
+             User's Question
+                      |
+                      ↓
+                Gemini API
+                      |
+          Generate Search Queries
+                      |
+                      ↓
+                  NewsAPI
+                      |
+              News Articles
+                      |
+                      ↓
+              Flask Backend
+                      |
+              Process JSON Data
+                      |
+                      ↓
+             HTML/JavaScript
+                      |
+                      ↓
+                 USER
+```
+
+---
+
+# 5. Complete Request Flow
+
+Suppose the user enters:
+
+```text
+What is happening with AI jobs in India?
+```
+
+The flow is:
+
+```text
+User
+ ↓
+Frontend
+ ↓
+GET /news?question=What is happening with AI jobs in India?
+ ↓
+Flask
+ ↓
+Gemini API
+ ↓
+Generate search queries
+ ↓
+India AI jobs
+AI jobs India
+Artificial intelligence employment India
+ ↓
+NewsAPI
+ ↓
+JSON response containing articles
+ ↓
+Flask processes the articles
+ ↓
+Frontend displays the articles
+```
+
+---
+
+# 6. Project Folder Structure
+
+```text
+news_ai_project/
 │
 ├── app.py
 ├── .env
@@ -98,137 +155,61 @@ news_api_project/
 
 ---
 
-# 7. What Is `app.py`?
+# 7. File Explanation
 
-`app.py` is the main Python file of the project.
+## `app.py`
 
-It contains:
+This is the main Flask backend file.
 
-* Flask application
-* Routes
-* API request logic
-* API-key loading
-* NewsAPI integration
-* JSON processing
-* Error handling
+It:
+
+* Starts the Flask application
+* Receives the user's question
+* Sends the question to Gemini
+* Gets search queries from Gemini
+* Sends the queries to NewsAPI
+* Receives news articles
+* Processes the JSON response
+* Removes duplicate articles
+* Sends the final data to the frontend
 
 ---
 
-# 8. What Is `.env`?
+## `index.html`
 
-`.env` means **environment file**.
+This is the frontend.
 
-It is used to store configuration values and secret information separately from the main source code.
+It:
 
-For this project, the NewsAPI key is stored in `.env`.
+* Displays the search box
+* Takes the user's question
+* Sends the question to Flask
+* Receives the response
+* Displays generated search queries
+* Displays news articles
+* Shows loading messages
+* Shows errors
+
+---
+
+## `.env`
+
+The `.env` file stores secret configuration values such as API keys.
 
 Example:
 
 ```text
-NEWS_API_KEY=YOUR_ACTUAL_API_KEY
+NEWS_API_KEY=your_newsapi_key
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
-The actual API key should be placed after `=`.
+The actual keys should be stored only on your local machine or in a secure deployment environment.
 
 ---
 
-# 9. Why Did I Use `.env`?
+## `.gitignore`
 
-I used `.env` to avoid directly writing my secret API key inside my Python source code.
-
-For example, this is not recommended:
-
-```python
-API_KEY = "my-secret-api-key"
-```
-
-Instead, I use:
-
-```python
-API_KEY = os.getenv("NEWS_API_KEY")
-```
-
-The actual key remains outside the source code.
-
-This makes it safer when the project is uploaded to GitHub.
-
----
-
-# 10. What Is an Environment Variable?
-
-An environment variable is a value stored outside the application's source code that the application can access while running.
-
-In this project:
-
-```text
-NEWS_API_KEY
-```
-
-is the environment variable name.
-
-Its value is the actual API key.
-
-Conceptually:
-
-```text
-Environment Variable
-        ↓
-NEWS_API_KEY
-        ↓
-Actual API Key
-```
-
----
-
-# 11. How Does Python Read the `.env` File?
-
-We install:
-
-```bash
-pip install python-dotenv
-```
-
-Then:
-
-```python
-from dotenv import load_dotenv
-```
-
-and:
-
-```python
-load_dotenv()
-```
-
-This loads the variables from `.env`.
-
-Then:
-
-```python
-API_KEY = os.getenv("NEWS_API_KEY")
-```
-
-reads the API key.
-
-The flow is:
-
-```text
-.env
- ↓
-load_dotenv()
- ↓
-Environment Variable
- ↓
-os.getenv()
- ↓
-Python gets API Key
-```
-
----
-
-# 12. What Is `.gitignore`?
-
-`.gitignore` is a Git configuration file that tells Git which files or folders should **not be included in commits**.
+`.gitignore` tells Git which files should not be uploaded to GitHub.
 
 Example:
 
@@ -239,183 +220,478 @@ __pycache__/
 .env
 ```
 
----
-
-# 13. Why Did I Put `.env` in `.gitignore`?
-
-I put `.env` inside `.gitignore` because it contains my secret API key.
-
-If I upload `.env` to GitHub, another person could potentially see and use my API key.
-
-Therefore:
+The important line is:
 
 ```text
 .env
 ```
 
-is added to:
-
-```text
-.gitignore
-```
-
-The important idea is:
-
-```text
-Actual API Key
-      ↓
-     .env
-      ↓
-.gitignore
-      ↓
-Not uploaded to GitHub
-```
+This prevents your API keys from accidentally being committed to GitHub.
 
 ---
 
-# 14. Why Are `venv/` and `__pycache__/` in `.gitignore`?
+## `requirements.txt`
 
-### `venv/`
-
-`venv` contains the local Python virtual environment and installed packages.
-
-It is usually not necessary to upload the entire virtual environment to GitHub.
-
-Instead, we use:
-
-```text
-requirements.txt
-```
-
-to tell others which packages are required.
-
-### `__pycache__/`
-
-Python creates this folder for cached Python bytecode.
-
-It is generated automatically and does not need to be stored in GitHub.
-
----
-
-# 15. What Is `requirements.txt`?
-
-`requirements.txt` contains the Python packages required to run the project.
-
-Example:
+This file contains the Python packages required by the project.
 
 ```text
 Flask
 requests
 python-dotenv
+google-genai
 ```
 
-When deploying or setting up the project on another computer:
+Install them using:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-installs the required packages.
-
 ---
 
-# 16. How Did I Get the API?
+# 8. How to Get the Gemini API Key
 
-I first identified that I needed a service that could provide news articles.
+Gemini API access can be set up through **Google AI Studio**.
 
-Then I searched for a suitable news API and referred to the **official NewsAPI documentation**.
+Open:
 
-I checked:
+[Google AI Studio](https://aistudio.google.com/)
 
-* Available endpoints
-* HTTP method
-* Required parameters
-* Authentication requirements
-* Response format
-
-After understanding the documentation, I selected the appropriate endpoint and integrated it into my Flask application.
-
----
-
-# 17. How Did I Obtain the API Key?
-
-I obtained the API key from the NewsAPI provider.
-
-The general process was:
+Basic process:
 
 ```text
-NewsAPI website
-      ↓
-Create account
-      ↓
-Sign in / verify account if required
-      ↓
-Access API key
-      ↓
-Copy the API key
-      ↓
+Google AI Studio
+       ↓
+Sign in
+       ↓
+Open API Keys
+       ↓
+Create API Key
+       ↓
+Copy the API Key
+       ↓
 Store it in .env
 ```
-
-I did not create the API key myself through Python.
-
-The API provider generated/provided the key for my application/account.
-
----
-
-# 18. Where Did You Store the API Key?
-
-I stored it in the `.env` file.
 
 Example:
 
 ```text
-NEWS_API_KEY=MY_ACTUAL_KEY
+GEMINI_API_KEY=AIzaSyXXXXXXXXXXXX
 ```
 
-I did not hard-code the actual key into `app.py`.
+Do **not** share your actual API key in:
+
+* GitHub
+* Public websites
+* Screenshots
+* Chat messages
+* Frontend JavaScript
 
 ---
 
-# 19. How Does the API Key Reach the API Request?
+# 9. How to Get the NewsAPI Key
 
-The process is:
+Create an account with NewsAPI and obtain an API key from its developer dashboard.
 
-```python
-load_dotenv()
+Then add it to `.env`:
 
-API_KEY = os.getenv("NEWS_API_KEY")
+```text
+NEWS_API_KEY=your_actual_newsapi_key
 ```
 
-Then:
+Your project therefore uses two external APIs:
+
+```text
+Gemini API
+     ↓
+Understands the user's question
+
+NewsAPI
+     ↓
+Retrieves news articles
+```
+
+---
+
+# 10. Gemini API vs NewsAPI
+
+These two APIs have different responsibilities.
+
+### Gemini API
+
+Gemini is used for:
+
+```text
+Understanding the user's natural-language question
+                  ↓
+Generating useful search queries
+```
+
+### NewsAPI
+
+NewsAPI is used for:
+
+```text
+Search query
+     ↓
+NewsAPI
+     ↓
+News articles
+```
+
+Gemini does **not** retrieve the news articles in this project.
+
+NewsAPI does **not** understand the user's entire natural-language question in the same way an LLM does.
+
+---
+
+# 11. What is an API?
+
+API stands for:
+
+**Application Programming Interface**
+
+In simple words:
+
+> An API allows one application or service to communicate with another application or service.
+
+Example:
+
+```text
+Our Flask Application
+        |
+        | API Request
+        ↓
+    Gemini API
+        |
+        | API Response
+        ↓
+Our Flask Application
+```
+
+---
+
+# 12. What is an API Key?
+
+An API key is a credential provided by an API service.
+
+It is used by the service to identify and authenticate the application making requests.
+
+Example:
+
+```text
+GEMINI_API_KEY=xxxxxxxx
+```
+
+The key is not the API itself.
+
+```text
+API
+↓
+The service/interface we communicate with
+
+API Key
+↓
+Credential used to access the service
+```
+
+---
+
+# 13. Why Does This Project Need Two API Keys?
+
+Because the application communicates with two external services.
+
+```text
+                 Flask
+                /     \
+               /       \
+              ↓         ↓
+          Gemini       NewsAPI
+             ↓            ↓
+        Query          News
+        generation     articles
+```
+
+Therefore:
+
+```text
+GEMINI_API_KEY
+NEWS_API_KEY
+```
+
+are stored separately.
+
+---
+
+# 14. Why Use `.env`?
+
+Instead of writing the API key directly in Python:
+
+```python
+GEMINI_API_KEY = "AIzaSyXXXXXXXX"
+```
+
+we use:
+
+```text
+GEMINI_API_KEY=AIzaSyXXXXXXXX
+```
+
+inside `.env`.
+
+Then Python reads it:
+
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+```
+
+This keeps sensitive credentials separate from the source code.
+
+---
+
+# 15. How Gemini Is Connected to Flask
+
+The application imports the Google GenAI library:
+
+```python
+from google import genai
+```
+
+The API key is loaded:
+
+```python
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+```
+
+A Gemini client is created:
+
+```python
+client = genai.Client(
+    api_key=GEMINI_API_KEY
+)
+```
+
+The application can then send a prompt to Gemini.
+
+Example:
+
+```python
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents=prompt
+)
+```
+
+The response can then be processed by Python.
+
+---
+
+# 16. Why Did We Add Gemini?
+
+Originally, the application could directly send the user's input to NewsAPI.
+
+For example:
+
+```text
+User:
+latest news on AI jobs in India
+```
+
+The application would directly search NewsAPI.
+
+The problem is that users can write questions in many ways.
+
+For example:
+
+```text
+What's happening with AI jobs in India?
+
+Tell me about AI employment in India.
+
+Are AI companies reducing jobs in India?
+
+What is the latest situation with AI jobs?
+```
+
+Gemini helps convert these natural-language questions into concise search queries.
+
+---
+
+# 17. Gemini's Role
+
+Gemini receives:
+
+```text
+User's natural-language question
+```
+
+and produces:
+
+```text
+Search query 1
+Search query 2
+Search query 3
+```
+
+For example:
+
+```text
+User:
+What is happening with AI jobs in India?
+
+Gemini:
+India AI jobs
+AI jobs India
+Artificial intelligence employment India
+```
+
+These queries are then sent to NewsAPI.
+
+---
+
+# 18. Important: Gemini Does Not Make Up the News
+
+The project separates two responsibilities.
+
+```text
+Gemini
+↓
+Understands the question
+↓
+Generates search queries
+
+NewsAPI
+↓
+Searches news sources
+↓
+Returns articles
+```
+
+Gemini is not being used as the source of the news articles.
+
+The actual articles come from NewsAPI.
+
+This is important when explaining the project in an interview.
+
+---
+
+# 19. Flask Endpoint
+
+The application creates:
+
+```python
+@app.route("/news")
+def get_news():
+```
+
+This creates the application's `/news` endpoint.
+
+The frontend sends:
+
+```text
+/news?question=AI jobs in India
+```
+
+Flask receives the question:
+
+```python
+user_question = request.args.get(
+    "question",
+    ""
+).strip()
+```
+
+---
+
+# 20. Query Parameter
+
+In:
+
+```text
+/news?question=AI jobs in India
+```
+
+the part:
+
+```text
+question=AI jobs in India
+```
+
+is a query parameter.
+
+It allows the frontend to send information to the backend through the URL.
+
+---
+
+# 21. GET Request
+
+The frontend uses:
+
+```javascript
+fetch(
+    `/news?question=${encodeURIComponent(question)}`
+);
+```
+
+This sends a GET request to Flask.
+
+The basic flow is:
+
+```text
+Browser
+   |
+   | GET request
+   ↓
+Flask /news
+```
+
+---
+
+# 22. NewsAPI Request
+
+For each generated query, Flask creates parameters:
 
 ```python
 params = {
-    "q": topic,
+    "q": query,
     "language": "en",
     "sortBy": "publishedAt",
     "pageSize": 10,
-    "apiKey": API_KEY
+    "apiKey": NEWS_API_KEY
 }
 ```
 
-Then:
+Then it sends the request:
 
 ```python
 response = requests.get(
     NEWS_API_URL,
-    params=params
+    params=params,
+    timeout=10
 )
 ```
 
-So:
+---
+
+# 23. What Does `requests.get()` Do?
+
+`requests.get()` sends an HTTP GET request from Python to another server.
+
+Example:
+
+```python
+response = requests.get(url)
+```
+
+In this project:
 
 ```text
-.env
- ↓
-Python
- ↓
-API_KEY
+Flask
  ↓
 requests.get()
  ↓
@@ -424,522 +700,222 @@ NewsAPI
 
 ---
 
-# 20. What Is the NewsAPI Endpoint?
+# 24. What Is JSON?
 
-The application uses the NewsAPI `everything` endpoint:
+JSON stands for:
 
-```text
-https://newsapi.org/v2/everything
-```
+**JavaScript Object Notation**
 
-The endpoint is used to search for news articles based on parameters.
-
-For example, conceptually:
-
-```text
-endpoint
-   +
-q=Python
-   +
-language=en
-   +
-apiKey=YOUR_KEY
-```
-
-creates the API request.
-
----
-
-# 21. What Is the `q` Parameter?
-
-`q` represents the search query.
-
-For example:
-
-```text
-q=Python
-```
-
-means:
-
-> Search for news related to Python.
-
-If the user enters:
-
-```text
-Artificial Intelligence
-```
-
-the backend sends that value as the search query.
-
----
-
-# 22. What Is the API Key?
-
-An API key is a credential provided by an API provider.
-
-It is used to identify or authenticate the application making the API request.
-
-Simple example:
-
-```text
-API
- ↓
-"Who is making this request?"
- ↓
-API Key
- ↓
-"Here is the application's credential."
-```
-
-The API key is **not the API itself**.
-
-```text
-NewsAPI
-   ↓
-The API/service
-
-API Key
-   ↓
-Credential used to access it
-```
-
----
-
-# 23. API vs API Key
-
-| API                         | API Key                                |
-| --------------------------- | -------------------------------------- |
-| Provides functionality/data | Identifies/authenticates the requester |
-| Example: NewsAPI            | Example: `NEWS_API_KEY`                |
-| Has endpoints               | Is a credential                        |
-| Receives requests           | Sent with the request                  |
-
----
-
-# 24. Complete Project Architecture
-
-```text
-                    USER
-                      |
-                      ↓
-             HTML / CSS / JavaScript
-                      |
-                      ↓
-              Flask Backend
-                      |
-                      ↓
-              Read .env file
-                      |
-                      ↓
-                 API Key
-                      |
-                      ↓
-             Python requests
-                      |
-                      ↓
-                 NewsAPI
-                      |
-                      ↓
-                JSON Response
-                      |
-                      ↓
-             Flask processes data
-                      |
-                      ↓
-                JSON Response
-                      |
-                      ↓
-               JavaScript
-                      |
-                      ↓
-                 NEWS CARDS
-                      |
-                      ↓
-                    USER
-```
-
----
-
-# 25. Complete Request Flow
-
-Suppose the user enters:
-
-```text
-Python
-```
-
-### Step 1
-
-Frontend sends:
-
-```text
-/news?topic=Python
-```
-
-to Flask.
-
-### Step 2
-
-Flask gets:
-
-```python
-topic = request.args.get("topic")
-```
-
-### Step 3
-
-Flask reads the API key:
-
-```python
-API_KEY = os.getenv("NEWS_API_KEY")
-```
-
-### Step 4
-
-Flask creates parameters:
-
-```python
-params = {
-    "q": topic,
-    "language": "en",
-    "sortBy": "publishedAt",
-    "pageSize": 10,
-    "apiKey": API_KEY
-}
-```
-
-### Step 5
-
-Python sends a GET request:
-
-```python
-requests.get(NEWS_API_URL, params=params)
-```
-
-### Step 6
-
-NewsAPI validates the request and returns JSON.
-
-### Step 7
-
-Flask processes the JSON.
-
-### Step 8
-
-Flask sends the required article information to JavaScript.
-
-### Step 9
-
-JavaScript displays the articles.
-
----
-
-# 26. What Is JSON?
-
-JSON stands for **JavaScript Object Notation**.
-
-It is a common format for exchanging structured data between applications.
+It is a common format for exchanging data between applications.
 
 Example:
 
 ```json
 {
-    "title": "Python Programming",
-    "source": "Example News",
-    "url": "https://example.com"
+    "title": "Example News",
+    "description": "News description",
+    "source": "Example Source"
 }
 ```
 
-The API returns data in JSON format, and Python reads the JSON response.
+The API returns JSON, and Python processes that JSON.
 
 ---
 
-# 27. Why Did You Use `requests`?
+# 25. Processing the News Response
 
-I used Python's `requests` library to send HTTP requests to the external NewsAPI.
-
-For example:
+The application gets the JSON response:
 
 ```python
-requests.get(
-    NEWS_API_URL,
-    params=params
+data = response.json()
+```
+
+Then it extracts the articles:
+
+```python
+articles = data.get(
+    "articles",
+    []
 )
 ```
 
-It allows my Flask backend to communicate with the external API.
-
----
-
-# 28. Why Did You Use Flask?
-
-I used Flask because it is a lightweight Python web framework.
-
-It allows me to:
-
-* Create routes
-* Receive requests
-* Process user input
-* Call external APIs
-* Return JSON responses
-* Connect frontend and backend
-
----
-
-# 29. Why Didn't You Call NewsAPI Directly From JavaScript?
-
-I used the Flask backend so that the API key is not exposed in frontend JavaScript.
-
-The safer architecture is:
+The application extracts information such as:
 
 ```text
-Frontend
-   ↓
-Flask Backend
-   ↓
-API Key
-   ↓
-NewsAPI
+Title
+Description
+Source
+Author
+Published date
+Article URL
+Image
 ```
 
-rather than putting the secret API key directly into browser-side JavaScript.
-
 ---
 
-# 30. What Is API Authentication?
+# 26. Removing Duplicate Articles
 
-Authentication is the process of verifying or identifying who is making a request.
+Because the application searches multiple queries, the same article can sometimes appear more than once.
 
-In this project, the API key is used as the credential for accessing NewsAPI.
-
----
-
-# 31. What Happens If the API Key Is Wrong?
-
-The API provider can reject the request.
-
-The application checks the response and returns an appropriate error message instead of assuming that every request succeeds.
-
----
-
-# 32. What Happens If the User Doesn't Enter a Topic?
-
-The backend checks:
+The project removes duplicates using the article URL.
 
 ```python
-if not topic:
+unique_articles = {}
+
+for article in all_articles:
+    article_url = article.get("url")
+
+    if article_url:
+        unique_articles[article_url] = article
 ```
 
-and returns:
-
-```json
-{
-    "error": "Please enter a topic"
-}
-```
-
-with an HTTP `400` status.
+The URL acts as a unique identifier.
 
 ---
 
-# 33. What Happens If the News API Is Unavailable?
+# 27. Final Response
 
-The application catches request-related errors:
+Flask sends the processed data back as JSON:
 
 ```python
-except requests.exceptions.RequestException:
+return jsonify({
+    "question": user_question,
+    "queries": queries,
+    "articles": final_articles
+})
 ```
 
-and returns an error response.
-
-This prevents the application from crashing without handling the problem.
-
----
-
-# 34. What HTTP Method Did You Use?
-
-I used the **GET** method because I am retrieving news data from the external API.
+The frontend receives this response.
 
 ```text
-GET → Retrieve data
+Flask
+  ↓
+JSON response
+  ↓
+JavaScript
+  ↓
+Display news
 ```
 
 ---
 
-# 35. Is NewsAPI a REST API?
+# 28. Frontend Communication
 
-Yes. NewsAPI provides HTTP-based API endpoints that can be consumed using HTTP requests and returns structured data such as JSON.
+JavaScript uses:
 
-In the project, I use a GET request to retrieve news articles.
+```javascript
+fetch()
+```
 
----
+to communicate with Flask.
 
-# 36. Did You Create NewsAPI?
-
-No.
-
-NewsAPI is an external third-party service.
-
-I integrated its API into my Flask application.
-
-A good interview answer is:
-
-> “No, I did not create the NewsAPI. I used it as a third-party API and integrated its endpoint into my Flask backend.”
-
----
-
-# 37. Did You Create an API in This Project?
-
-Yes.
-
-I created a Flask endpoint:
+Basic flow:
 
 ```text
-/news
+HTML
+ ↓
+JavaScript
+ ↓
+fetch()
+ ↓
+Flask
+ ↓
+JSON response
+ ↓
+JavaScript
+ ↓
+HTML page
 ```
 
-The endpoint receives the user's topic, calls the external NewsAPI, processes its response, and returns the required data to the frontend.
+---
 
-So there are two API sides:
+# 29. Error Handling
+
+The application handles several possible errors.
+
+### Empty question
 
 ```text
-My Flask API
-      ↓
-/news
-
-External API
-      ↓
-NewsAPI
+User submits nothing
+        ↓
+Flask returns 400
 ```
 
----
-
-# 38. What Is the Difference Between Your Flask API and NewsAPI?
-
-| My Flask API        | NewsAPI                         |
-| ------------------- | ------------------------------- |
-| Created by me       | Created by third-party provider |
-| Built using Flask   | External service                |
-| `/news` endpoint    | `/v2/everything` endpoint       |
-| Receives user topic | Provides news data              |
-| Calls NewsAPI       | Returns news information        |
-
----
-
-# 39. Why Did You Use an External API Instead of Creating Your Own News Database?
-
-Creating and maintaining a complete news database would require collecting, storing, updating, and managing news articles.
-
-For a learning project, using an external API allowed me to focus on understanding:
-
-* API integration
-* Authentication
-* Requests
-* JSON
-* Backend processing
-* Frontend display
-
----
-
-# 40. How Did You Know Which Parameters to Send?
-
-I referred to the official API documentation.
-
-The documentation explains:
-
-* Endpoint
-* HTTP method
-* Required parameters
-* Optional parameters
-* Authentication
-* Response structure
-
-I used those documented details to construct my request.
-
----
-
-# 41. How Did You Know Which Fields to Extract?
-
-I checked the API documentation and its example JSON response.
-
-From the response, I identified fields such as:
+### Missing NewsAPI key
 
 ```text
-title
-description
-source
-url
-urlToImage
+NEWS_API_KEY not found
+        ↓
+Flask returns error
 ```
 
-Then I extracted only the fields needed by my application.
+### Missing Gemini key
+
+```text
+GEMINI_API_KEY not found
+        ↓
+Flask returns error
+```
+
+### API connection failure
+
+```text
+NewsAPI cannot be reached
+        ↓
+Exception occurs
+        ↓
+Error response
+```
+
+### No articles
+
+```text
+API returns zero articles
+        ↓
+Frontend displays
+"No articles found"
+```
 
 ---
 
-# 42. What Is an Endpoint?
+# 30. Why Use `python-dotenv`?
 
-An endpoint is a specific URL through which an application can access a particular API function or resource.
-
-For this project:
-
-```text
-https://newsapi.org/v2/everything
-```
-
-is the external endpoint used to search for articles.
-
-My Flask application also has:
-
-```text
-/news
-```
-
-as one of its endpoints.
-
----
-
-# 43. What Is a Query Parameter?
-
-A query parameter is additional information sent in the URL/request to control what data the API should return.
-
-For example:
-
-```text
-q=Python
-```
-
-means the search query is Python.
-
-In Flask:
-
-```python
-request.args.get("topic")
-```
-
-gets the query parameter sent by the frontend.
-
----
-
-# 44. What Is the Difference Between `.env` and `.gitignore`?
-
-This is an important interview question.
-
-### `.env`
-
-Stores secret/configuration values.
+`python-dotenv` loads values from the `.env` file into environment variables.
 
 Example:
 
+```python
+from dotenv import load_dotenv
+
+load_dotenv()
+```
+
+Then:
+
+```python
+os.getenv("GEMINI_API_KEY")
+```
+
+can retrieve the value.
+
+---
+
+# 31. `.env` vs `.gitignore`
+
+These two files have different purposes.
+
+### `.env`
+
+Stores configuration/secrets.
+
 ```text
-NEWS_API_KEY=MY_SECRET_KEY
+GEMINI_API_KEY=xxxxx
+NEWS_API_KEY=xxxxx
 ```
 
 ### `.gitignore`
 
-Tells Git which files should not be tracked or uploaded.
-
-Example:
+Tells Git what not to track.
 
 ```text
 .env
@@ -954,371 +930,498 @@ Contains secret
 
 .gitignore
    ↓
-Prevents .env from being committed
+Prevents Git from tracking .env
 ```
-
-They have different purposes.
 
 ---
 
-# 45. Is `.gitignore` Itself Secret?
+# 32. Why Should the API Key Not Be in Frontend JavaScript?
 
-No.
+Frontend JavaScript is sent to the user's browser.
 
-`.gitignore` does not contain the API key.
+Therefore, users can inspect the browser's source/code.
 
-It only contains rules telling Git which files to ignore.
+If we put:
 
-For example:
+```javascript
+const API_KEY = "xxxxxxxx";
+```
+
+in frontend code, the key could become visible.
+
+Instead:
 
 ```text
-.env
-venv/
-__pycache__/
+Frontend
+   ↓
+Flask backend
+   ↓
+Gemini / NewsAPI
 ```
 
----
-
-# 46. What If You Accidentally Upload the API Key to GitHub?
-
-I would immediately revoke or regenerate the exposed API key through the API provider and replace it with a new key.
-
-Then I would remove the secret from the repository and make sure the `.env` file is ignored.
-
-The important point is that simply deleting the key from the latest file may not remove it from Git history.
+The API keys remain on the backend.
 
 ---
 
-# 47. Why Should API Keys Not Be Hard-Coded?
+# 33. How the Project Uses REST APIs
 
-Suppose I write:
+The project communicates with web APIs using HTTP requests.
 
-```python
-API_KEY = "abc123"
-```
-
-If I upload the source code to GitHub, the key could become visible to others.
-
-Using:
-
-```python
-API_KEY = os.getenv("NEWS_API_KEY")
-```
-
-keeps the secret outside the source code.
-
----
-
-# 48. How Would You Handle the API Key During Deployment?
-
-During deployment, I would add the API key as an **environment variable/secret** in the hosting platform rather than uploading `.env` to GitHub.
-
-The application can then read:
-
-```python
-os.getenv("NEWS_API_KEY")
-```
-
-without putting the actual key into the source code.
-
----
-
-# 49. Why Did You Use `python-dotenv`?
-
-I used `python-dotenv` to load variables from the local `.env` file into the application's environment.
-
-This makes local development easier while keeping the secret separate from the source code.
-
----
-
-# 50. What Did You Learn From This Project?
-
-The main things I learned were:
-
-1. API discovery
-2. API documentation
-3. API endpoints
-4. HTTP GET requests
-5. Query parameters
-6. API keys
-7. Authentication
-8. Environment variables
-9. `.env`
-10. `.gitignore`
-11. JSON responses
-12. Flask routes
-13. Frontend-backend communication
-14. Third-party API integration
-15. Error handling
-16. Secure handling of credentials
-
----
-
-# 51. What Was the Most Important Concept You Learned?
-
-The most important concept I learned was **secure third-party API integration**.
-
-Earlier, I understood how to call a public API.
-
-With this project, I learned that when an API requires authentication, I should obtain the API key from the provider, store it securely, and use it from the backend instead of exposing it in frontend code.
-
----
-
-# 52. One-Minute Project Explanation
-
-> “I developed a News Search application using Python Flask, HTML, CSS, and JavaScript. The main purpose of the project was to learn third-party API integration with API-key-based authentication. The user enters a topic on the frontend, and JavaScript sends the topic to my Flask backend. The backend reads the NewsAPI key from an environment variable and sends a GET request to the NewsAPI endpoint along with the search parameters. NewsAPI returns the news information in JSON format. Flask processes the JSON response and sends the required article details back to the frontend, where they are displayed to the user. I stored the API key in a `.env` file and added `.env` to `.gitignore` so that the secret would not be committed to GitHub. Through this project, I learned API keys, authentication, REST APIs, JSON, query parameters, Flask, environment variables, and secure API integration.”
-
----
-
-# 53. Short Interview Explanation
-
-> “I built a News Search App using Flask and NewsAPI to learn API-key-based integration. The frontend sends the search topic to Flask, Flask reads the API key from an environment variable, calls the NewsAPI using a GET request, processes the JSON response, and sends the required news information back to the frontend. I used `.env` to store the API key and `.gitignore` to prevent the `.env` file from being committed to GitHub.”
-
----
-
-# 54. Important Interview Questions — Quick List
-
-### Project Basics
-
-1. What is your project?
-2. Why did you build this project?
-3. What problem does it solve?
-4. What are the main features?
-5. What technologies did you use?
-6. What was your role in the project?
-7. Explain the project architecture.
-8. Explain the complete project flow.
-9. What did you learn from this project?
-
-### API Questions
-
-10. What is an API?
-11. What is a REST API?
-12. What is an endpoint?
-13. What is an API request?
-14. What is an API response?
-15. What is JSON?
-16. What is a query parameter?
-17. What HTTP method did you use?
-18. Why did you use GET?
-19. How did you find the API?
-20. How did you read the API documentation?
-21. How did you know the endpoint?
-22. How did you know which parameters to send?
-23. How did you know which response fields to extract?
-
-### API Key Questions
-
-24. What is an API key?
-25. Why does an API require an API key?
-26. How did you obtain the API key?
-27. Where did you store the API key?
-28. Why didn't you hard-code the API key?
-29. What is `.env`?
-30. What is an environment variable?
-31. How does Python read the API key?
-32. Why did you use `python-dotenv`?
-33. Why shouldn't the API key be stored in frontend JavaScript?
-34. What happens if the API key is invalid?
-35. What happens if your API key is exposed?
-36. How would you handle the API key during deployment?
-
-### Git/GitHub Questions
-
-37. What is `.gitignore`?
-38. Why did you add `.env` to `.gitignore`?
-39. Why did you add `venv/` to `.gitignore`?
-40. Why did you add `__pycache__/`?
-41. Is `.gitignore` secret?
-42. What happens if you accidentally push the API key to GitHub?
-43. How would you secure the API key after deployment?
-
-### Flask Questions
-
-44. Why did you use Flask?
-45. What is a Flask route?
-46. What is `/news`?
-47. How does Flask receive the user's topic?
-48. What does `request.args.get()` do?
-49. Why did you use `jsonify()`?
-50. How does Flask communicate with NewsAPI?
-51. How does Flask communicate with the frontend?
-
-### Error Handling
-
-52. What happens if the user enters nothing?
-53. What happens if NewsAPI is unavailable?
-54. What happens if the API key is invalid?
-55. What HTTP status code do you return for bad input?
-56. Why did you use `try-except`?
-57. How do you handle API errors?
-
-### Practical/Scenario Questions
-
-58. What would happen if you removed `.env`?
-59. What happens if `NEWS_API_KEY` is not found?
-60. What happens if NewsAPI changes its response format?
-61. How would you add categories to the application?
-62. How would you add pagination?
-63. How would you add a loading indicator?
-64. How would you improve the UI?
-65. How would you deploy the application?
-66. How would you protect the API key in production?
-67. How would you add another external API?
-68. How would you store news articles in a database?
-69. How would you add user authentication?
-70. How would you make the application production-ready?
-
----
-
-# 55. Best Answers to the Most Important Questions
-
-### Q1. Why did you build this project?
-
-> “I built this project mainly to learn third-party API integration with API-key-based authentication. I wanted to understand how to obtain an API key, securely store it, send authenticated requests from Flask, process JSON responses, and display the data in a frontend.”
-
-### Q2. How did you get the API?
-
-> “I first identified that I needed a news service. I searched for a suitable news API and referred to its official documentation. I checked the available endpoints, parameters, authentication requirements, and response format, and then integrated the required endpoint into my Flask application.”
-
-### Q3. How did you obtain the API key?
-
-> “I created an account with the API provider and obtained the API key provided for my application. I then stored it in a `.env` file instead of hard-coding it in my source code.”
-
-### Q4. Why did you use `.env`?
-
-> “I used `.env` to keep the API key separate from my source code. This reduces the chance of accidentally exposing the key when sharing or uploading the project.”
-
-### Q5. Why did you use `.gitignore`?
-
-> “I added `.env` to `.gitignore` so Git would not track and commit the file containing my API key. I also ignored generated files such as the virtual environment and Python cache files.”
-
-### Q6. What if I remove `.gitignore`?
-
-> “Git could potentially track the `.env` file when I add files using `git add .`. That could lead to accidentally committing the API key.”
-
-### Q7. Did `.gitignore` remove the API key?
-
-> “No. `.gitignore` only tells Git not to track certain files. It does not delete or encrypt the file.”
-
-### Q8. Why didn't you put the API key in JavaScript?
-
-> “Because JavaScript runs in the user's browser. A secret placed there can potentially be viewed by the user. I kept the API key on the Flask backend and made the backend call the external API.”
-
-### Q9. Did you create NewsAPI?
-
-> “No. NewsAPI is an external third-party service. I integrated its API into my Flask application.”
-
-### Q10. What did you create?
-
-> “I created the Flask backend and its `/news` endpoint. That endpoint receives the user's topic, calls the external NewsAPI, processes the response, and returns the required data to the frontend.”
-
-### Q11. What happens when a user searches for Python?
-
-> “The frontend sends `Python` to my Flask `/news` endpoint. Flask reads the API key from the environment, sends a GET request to NewsAPI with the search query and API key, receives the JSON response, extracts the required article information, and returns it to the frontend for display.”
-
-### Q12. What if the API key is leaked?
-
-> “I would revoke or regenerate the exposed key through the API provider and replace it with a new secret. I would also make sure the key is removed from the repository and that `.env` is properly ignored.”
-
----
-
-# 56. Final Project Flow to Remember
+Examples include:
 
 ```text
-USER
-  ↓
-Enter News Topic
-  ↓
-HTML + JavaScript
-  ↓
-GET /news?topic=Python
-  ↓
-FLASK
-  ↓
-Read API Key
-  ↓
-.env → os.getenv()
-  ↓
-Python requests
-  ↓
-NewsAPI
-  ↓
-API Key Authentication
-  ↓
-JSON Response
-  ↓
-Flask Processes JSON
-  ↓
-JSON Response
-  ↓
-JavaScript
-  ↓
-Display News
-  ↓
-USER
-```
-
----
-
-# 57. Most Important Things to Remember for the Interview
-
-```text
-API
-→ Lets applications communicate.
-
-REST API
-→ A common HTTP-based style of building web APIs.
-
-Endpoint
-→ Specific API URL.
-
-API Key
-→ Credential used by the API provider to identify/authenticate requests.
-
-.env
-→ Stores local secret/configuration values.
-
-Environment Variable
-→ Value available to the application outside the source code.
-
-.gitignore
-→ Tells Git which files should not be tracked.
-
-requests
-→ Python library used to send HTTP requests.
-
-Flask
-→ Python web framework used for the backend.
-
-JSON
-→ Common format used for exchanging structured data.
-
 GET
-→ HTTP method used here to retrieve news.
-
-NewsAPI
-→ External third-party API providing news data.
+POST
+PUT
+PATCH
+DELETE
 ```
 
-# 58. One-Line Memory Formula
+This project mainly uses **GET requests** to retrieve information.
+
+The architecture can be described as:
+
+> A Flask-based web application that integrates external REST APIs.
+
+---
+
+# 34. API vs Endpoint
+
+### API
+
+A complete interface/service that allows applications to communicate.
+
+### Endpoint
+
+A specific URL through which a particular API operation can be accessed.
+
+Example:
 
 ```text
-Find API
-   ↓
-Read Documentation
-   ↓
-Get API Key
-   ↓
-Store Key Securely
-   ↓
-Send GET Request
-   ↓
-Receive JSON
-   ↓
-Process JSON
-   ↓
-Display Data
+/news
 ```
 
-This is the complete learning cycle for **API-key-based integration with Flask**.
+is an endpoint created by our Flask application.
+
+The external NewsAPI also provides its own endpoints.
+
+---
+
+# 35. API Integration Process
+
+The general API integration process used in this project is:
+
+```text
+1. Identify the required functionality
+             ↓
+2. Find a suitable API
+             ↓
+3. Read official documentation
+             ↓
+4. Get required credentials
+             ↓
+5. Identify endpoint
+             ↓
+6. Identify HTTP method
+             ↓
+7. Identify parameters
+             ↓
+8. Send request
+             ↓
+9. Receive JSON response
+             ↓
+10. Process the response
+             ↓
+11. Display/use the data
+```
+
+---
+
+# 36. How to Run the Project
+
+## Step 1: Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+Activate it on Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+---
+
+## Step 2: Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Step 3: Create `.env`
+
+Create a file named:
+
+```text
+.env
+```
+
+Add:
+
+```text
+NEWS_API_KEY=your_newsapi_key
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+---
+
+## Step 4: Run Flask
+
+```bash
+python app.py
+```
+
+You should see Flask running locally.
+
+Open the local address shown by Flask in your browser.
+
+---
+
+# 37. Example Usage
+
+User enters:
+
+```text
+Tell me the latest news about AI jobs in India
+```
+
+Gemini generates search queries:
+
+```text
+AI jobs India
+India artificial intelligence employment
+AI companies India jobs
+```
+
+NewsAPI searches these queries.
+
+The application then displays the retrieved articles.
+
+---
+
+# 38. One-Minute Interview Explanation
+
+> I developed an AI News Search application using Python, Flask, HTML, CSS, and JavaScript. The application allows users to enter news questions in natural language. I integrated Gemini to understand the user's question and generate concise search queries. These queries are then sent to NewsAPI to retrieve relevant news articles. The Flask backend processes the JSON response, removes duplicate articles, and sends the required information to the frontend. I also learned API-key-based authentication and stored the Gemini and NewsAPI keys securely using environment variables and a `.env` file.
+
+---
+
+# 39. Interview Questions and Answers
+
+## Q1. Tell me about your project.
+
+> I developed an AI News Search application using Flask. Users can enter a natural-language news question. The Flask backend sends the question to Gemini, which generates concise search queries. I then use those queries with NewsAPI to retrieve news articles. The backend processes the JSON response and sends the results to the frontend.
+
+---
+
+## Q2. Why did you use Gemini?
+
+> I used Gemini to understand natural-language questions and convert them into concise search queries that can be used with the news API.
+
+---
+
+## Q3. Why didn't you directly send the user's question to NewsAPI?
+
+> Directly sending a long conversational question may not always produce useful search results. Gemini helps extract the important topics and generate shorter search queries.
+
+---
+
+## Q4. What is Gemini's role?
+
+> Gemini acts as the natural-language understanding layer. It converts the user's question into search queries.
+
+---
+
+## Q5. What is NewsAPI's role?
+
+> NewsAPI retrieves news articles based on the search queries generated by Gemini.
+
+---
+
+## Q6. Did you create Gemini?
+
+> No. Gemini is an external Google AI service. I integrated its API into my Flask application.
+
+---
+
+## Q7. Did you create NewsAPI?
+
+> No. NewsAPI is an external news service. I integrated it into my application.
+
+---
+
+## Q8. How did you get the Gemini API key?
+
+> I created the API key through Google AI Studio and stored it as an environment variable instead of hardcoding it in my source code.
+
+---
+
+## Q9. Where did you store the API key?
+
+> I stored it in a `.env` file during local development and added `.env` to `.gitignore` so that the secret would not be committed to Git.
+
+---
+
+## Q10. Why shouldn't API keys be uploaded to GitHub?
+
+> API keys are credentials. If they become public, another person could potentially use the credentials and consume the associated API access or quota.
+
+---
+
+## Q11. What is an API key?
+
+> An API key is a credential provided by an API service to identify or authorize requests from an application.
+
+---
+
+## Q12. What is JSON?
+
+> JSON is a lightweight data format commonly used for exchanging data between applications and APIs.
+
+---
+
+## Q13. What is Flask?
+
+> Flask is a lightweight Python web framework. I used it to create the backend and API endpoint for my application.
+
+---
+
+## Q14. What is the `/news` endpoint?
+
+> `/news` is an endpoint created in my Flask application. It receives the user's news question, processes it using Gemini and NewsAPI, and returns the results.
+
+---
+
+## Q15. How does frontend communicate with backend?
+
+> The frontend uses JavaScript's `fetch()` function to send an HTTP request to the Flask backend. Flask processes the request and returns a JSON response, which JavaScript uses to update the webpage.
+
+---
+
+## Q16. What is the complete architecture?
+
+> The flow is: User → Frontend → Flask Backend → Gemini API → Search Queries → NewsAPI → JSON Response → Flask → Frontend.
+
+---
+
+## Q17. What happens if the API key is missing?
+
+> The application checks whether the required API key is available. If it is missing, the application returns an appropriate error instead of making the API request.
+
+---
+
+## Q18. What happens if NewsAPI is unavailable?
+
+> The application catches the request exception and returns an error message to the frontend.
+
+---
+
+## Q19. Why did you use `requests`?
+
+> I used the Python `requests` library to send HTTP requests from my Flask backend to external APIs.
+
+---
+
+## Q20. What is `python-dotenv`?
+
+> `python-dotenv` is a Python package that loads variables from a `.env` file into the application's environment.
+
+---
+
+# 40. Scenario-Based Interview Questions
+
+## Scenario 1: The API key is exposed on GitHub. What would you do?
+
+Answer:
+
+> I would immediately revoke or regenerate the exposed API key through the provider, remove the secret from the repository and relevant history if necessary, create a new key, and store it securely using environment variables.
+
+---
+
+## Scenario 2: Gemini generates poor search queries. What would you do?
+
+Answer:
+
+> I would improve the prompt used for query generation and add rules for concise, relevant queries. I could also validate the generated output before sending it to NewsAPI.
+
+---
+
+## Scenario 3: NewsAPI returns duplicate articles.
+
+Answer:
+
+> Since multiple search queries can return the same article, I can use the article URL as a unique identifier and remove duplicate URLs before displaying the results.
+
+---
+
+## Scenario 4: The user enters an empty question.
+
+Answer:
+
+> I validate the input before making any API request. If the question is empty, I return a 400 error and ask the user to enter a question.
+
+---
+
+## Scenario 5: Gemini is unavailable.
+
+Answer:
+
+> The application should catch the API error and return a meaningful error message instead of crashing.
+
+---
+
+# 41. Important Concepts Learned
+
+Through this project, I learned:
+
+```text
+Python
+   ↓
+Flask
+   ↓
+HTTP
+   ↓
+REST APIs
+   ↓
+API Endpoints
+   ↓
+GET Requests
+   ↓
+Query Parameters
+   ↓
+API Keys
+   ↓
+Environment Variables
+   ↓
+JSON
+   ↓
+Gemini LLM
+   ↓
+NewsAPI
+   ↓
+Frontend-Backend Communication
+   ↓
+Error Handling
+   ↓
+Git/GitHub
+```
+
+---
+
+# 42. Important Interview Terminology
+
+Use these terms correctly.
+
+### Instead of:
+
+> I extracted the Gemini API.
+
+Say:
+
+> I integrated the Gemini API.
+
+### Instead of:
+
+> I created Gemini API.
+
+Say:
+
+> I created an API key and integrated the Gemini API into my application.
+
+### Instead of:
+
+> Gemini gives me the news.
+
+Say:
+
+> Gemini generates search queries, while NewsAPI retrieves the news articles.
+
+### Instead of:
+
+> `.gitignore` hides my API key.
+
+Say:
+
+> `.gitignore` prevents the `.env` file from being tracked by Git.
+
+---
+
+# 43. Simple Memory Formula
+
+Remember the entire project using:
+
+```text
+USER
+ ↓
+QUESTION
+ ↓
+FLASK
+ ↓
+GEMINI
+ ↓
+SEARCH QUERIES
+ ↓
+NEWSAPI
+ ↓
+JSON
+ ↓
+FLASK
+ ↓
+FRONTEND
+ ↓
+NEWS ARTICLES
+```
+
+For API-key security:
+
+```text
+API KEY
+   ↓
+.env
+   ↓
+os.getenv()
+   ↓
+Flask Backend
+   ↓
+External API
+```
+
+---
+
+# 44. Final Project Summary
+
+This project demonstrates how an application can combine an **LLM** with a traditional **REST API**.
+
+```text
+LLM
+↓
+Understands user intent
+↓
+Generates search queries
+↓
+Traditional News API
+↓
+Retrieves actual articles
+↓
+Flask
+↓
+Processes the data
+↓
+Frontend
+↓
+Displays results
+```
+
+The main learning outcome is understanding how **frontend, backend, LLM APIs, REST APIs, API keys, JSON, and external services communicate with each other in a real application**.
